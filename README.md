@@ -27,24 +27,24 @@ Requires knowledge of django CMS Versioning
 ### Install the following packages
 The following packages are not yet officially released, they need to be installed directly from the repository. We need your help to make packages v4.0 compatible and to provide documentation for the wider community!
 
-django CMS 4.0
+django CMS 4.0+
 ```
-pip install http://github.com/divio/django-cms/tarball/release/4.0.x#egg=django-cms
+pip install django-cms
 ```
 
 djangocms-text-ckeditor
 ```
-pip install https://github.com/divio/djangocms-text-ckeditor/tarball/support/4.0.x#egg=djangocms-text-ckeditor
+pip install djangocms-text-ckeditor
 ```
 
 djangocms-versioning
 ```
-pip install https://github.com/divio/djangocms-versioning/tarball/master#egg=djangocms-versioning
+pip install djangocms-versioning
 ```
 
 djangocms-alias
 ```
-pip install https://github.com/divio/djangocms-alias/tarball/master#egg=djangocms-alias
+pip install djangocms-alias
 ```
 
 ## Installation
