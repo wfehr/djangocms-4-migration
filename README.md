@@ -52,7 +52,7 @@ pip install djangocms-alias
 
 First install this package in your project
 ```
-pip install djangocms-4-migration
+pip install git+https://github.com/fsbraun/djangocms-4-migration
 ```
 
 ## Configuration
