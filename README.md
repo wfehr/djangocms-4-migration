@@ -6,7 +6,10 @@
 This package is designed to migrate a django CMS 3.5+ project to django CMS 4.0.
 
 ## What does this package do?
-- Keeps any draft and published content, ensuring that any new draft changes are kept as a new draft version in djangocms_versioning. 
+- Keeps any draft and published content, ensuring that any new draft changes are kept as a new draft version in djangocms_versioning.
+- Creates aliases for static placeholder
+- Migrates alias plugins
+- Runs django CMS' migrations
 
 ## Limitations
 Due to the nature of the changes between django CMS 3.5+ and 4.0 the package will fail to function if an incompatible package is installed. 
