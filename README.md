@@ -73,6 +73,11 @@ Simply run the following command to run the data migration.
 python manage.py cms4_migration
 ```
 
+You can ignore warnings of the form 
+```
+UserWarning: No user has been supplied when creating a new AliasContent object. No version could be created. Make sure that the creating code also creates a Version objects or use AliasContent.objects.with_user(user).create(...)
+```
+
 ## Common solutions for django CMS 4.0 compatibility
 
 Import PageContent in a backwards compatible way (Title).
