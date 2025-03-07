@@ -60,6 +60,14 @@ pip install git+https://github.com/fsbraun/djangocms-4-migration
 
 ## Configuration
 
+Add the migration tool to `INSTALLED_APPS` temporarily. In your `settings.py` make sure that it is listed. You can remove it after the migration process.
+```
+INSTALLED_APPS = [
+    ...,
+    "djangocms_4_migration",
+    ...,
+```
+
 If you have a custom user model, you should designate a "migration user" by specifying the user ID in your settings like so:
 
 ```
