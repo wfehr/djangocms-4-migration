@@ -124,7 +124,7 @@ def _get_or_create_alias(category, static_code, site):
 
 
 def _create_alias_content(alias, name, language, user, state=PUBLISHED):
-    alias_content = AliasContent.objects.create(
+    alias_content = AliasContent.objects.with_user(user).create(
         alias=alias,
         name=name,
         language=language,
