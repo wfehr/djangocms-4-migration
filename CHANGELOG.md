@@ -1,6 +1,14 @@
 # Changelog
 
-## (unreleased)
+## 0.1.0 (2025-03-14)
+
+* feature: Update foreign key relations to page objects
+* feature: Update soft relation of djangocms-link 5+
+* feature: Update soft relation of djangocms-frontend objects
+* fix: Customer model username retrieval during migration
+* fix: Crashed when running w/o `CMS_MIGRATION_USER_ID` setting
+
+# 0.0.3
 
 * feature: Update foreign key relations to page objects
 * feature: Update soft relation of djangocms-link 5+
