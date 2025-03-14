@@ -1,5 +1,7 @@
 import logging
+from packaging.version import Version as PgkVersion
 
+from django.conf import settings
 from django.core.management.base import BaseCommand
 from django.contrib.contenttypes.models import ContentType
 from django.db import connection
@@ -15,6 +17,55 @@ from djangocms_versioning.models import Version
 
 
 logger = logging.getLogger(__name__)
+
+
+def _fix_link_plugins(page):
+    """djangocms-link with version above 5.0.0 stores only "soft" references to pages in JSON fields which will not be
+    updated by `_fix_page_refernces`"""
+    if "djangocms_link" in settings.INSTALLED_APPS:
+        from djangocms_link import __version__
+        from djangocms_link.models import Link
+
+        if PgkVersion(__version__) >= PgkVersion("5.0.0"):
+            for link in Link.objects.all():
+                if "internal_link" in link.link and link.link["internal_link"].startswith("cms.page:"):
+                    _, linked_page_id = link.link["internal_link"].split(":")
+                    if linked_page_id == str(page.pk):
+                        replacement_page = Page.objects.filter(node_id=page.node_id).exclude(id=page.id).get()
+                        logger.info("Fixing link reference from Page %s to %s", page.id, replacement_page.id)
+                        link.link["internal_link"] = f"cms.page:{replacement_page.pk}"
+                        link.save()
+
+def _fix_frontend_refernces(page):
+    """djangocms-frontend stores only "soft" references to pages in JSON fields which will not be
+    updated by `_fix_page_refernces`"""
+    def search(json, reference, pk):
+        changed = False
+        for key, value in json.items():
+            if key == "internal_link" and value.startswith(reference + ":"):
+                # Update link field
+                _, linked_page_id = value.split(":")
+                if linked_page_id == str(pk):
+                    replacement_page = Page.objects.filter(node_id=page.node_id).exclude(id=page.id).get()
+                    json[key] = f"{reference}:{replacement_page.pk}"
+                    changed = True
+            elif isinstance(value, dict) and "model" in value and value["model"] == reference and "pk" in value:
+                # Update reference
+                if value["pk"] == pk:
+                    replacement_page = Page.objects.filter(node_id=page.node_id).exclude(id=page.id).get()
+                    value["pk"] = replacement_page.pk
+                    changed = True
+            elif isinstance(value, dict):
+                # search recursively
+                changed = changed or search(value, reference, pk)
+        return changed
+
+    if "djangocms_frontend" in settings.INSTALLED_APPS:
+        from djangocms_frontend.models import FrontendUIItem
+
+        for frontend_component in FrontendUIItem.objects.all():
+            if search(frontend_component.config, "cms.page", page.pk):
+                frontend_component.save()
 
 
 def _fix_page_references(page):
@@ -106,6 +157,8 @@ class Command(BaseCommand):
 
             if not page_content_list.exists():
                 _fix_page_references(page)
+                _fix_link_plugins(page)
+                _fix_frontend_refernces(page)
                 _delete_page(page)
                 stats['page_deleted'] = stats['page_deleted'] + 1
                 continue

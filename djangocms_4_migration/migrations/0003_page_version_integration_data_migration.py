@@ -1,7 +1,7 @@
 import logging
-import os
 
 from django.conf import settings
+from django.contrib.auth import get_user_model
 from django.db import migrations
 from djangocms_versioning.constants import ARCHIVED, DRAFT, PUBLISHED
 
@@ -14,6 +14,8 @@ CMS_3_PUBLISHER_STATE_DEFAULT = 0
 CMS_3_PUBLISHER_STATE_DIRTY = 1
 # Page was marked published, but some of page parents are not.
 CMS_3_PUBLISHER_STATE_PENDING = 4
+
+USERNAME_FIELD = getattr(get_user_model(), "USERNAME_FIELD", "username")
 
 
 def forwards(apps, schema_editor):
@@ -64,7 +66,7 @@ def forwards(apps, schema_editor):
         # Find the user
         try:
             created_by = User.objects.using(db_alias).get(
-                **{User.USERNAME_FIELD: page_content.page.created_by}
+                **{USERNAME_FIELD: page_content.page.created_by}
             )
         except:
             # Use the first super user as the author as a fall back
@@ -88,7 +90,7 @@ def forwards(apps, schema_editor):
     for existing_title in PageData.objects.using(db_alias).all():
         """
         If Title was published keep it and create a version
-        If Title was not published 
+        If Title was not published
         """
         logger.info("Existing title: {}".format(str(existing_title.title_id)))
 
