@@ -68,6 +68,8 @@ INSTALLED_APPS = [
     "djangocms_verisoning",
     "djangocms_alias",
     ...,
+]
+CMS_CONFIRM_VERSION4 = True
 ```
 
 If you have a custom user model, you should designate a "migration user" by specifying the user ID in your settings like so:
