@@ -101,7 +101,6 @@ def forwards(apps, schema_editor):
         # If this is the draft page
         if existing_title.publisher_is_draft:
             _handle_draft_page(existing_title)
-
         # Otherwise this is the published page
         else:
             _handle_public_page(existing_title)

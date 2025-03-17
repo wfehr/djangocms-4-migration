@@ -166,6 +166,7 @@ class Command(BaseCommand):
             stats['pagecontents_count'] = stats['pagecontents_count'] + page_content_list.count()
 
             # Find if each PageContents has versions attached.
+            languages = []
             for page_content in page_content_list:
                 # If there are no versions for the pagecontents clean them out as they are not required
                 if not Version.objects.filter(
@@ -175,5 +176,12 @@ class Command(BaseCommand):
                     _delete_page_content_placeholders(page_content_contenttype, page_content)
                     _delete_page_content(page_content)
                     stats['pagecontents_deleted'] = stats['pagecontents_deleted'] + 1
+                else:
+                    languages.append(page_content.language)
+
+            for language in languages:
+                # Delete redundant page urls (the first is the published one - keep it)
+                for url in page.urls.filter(language=language).order_by("pk")[1:]:
+                    url.delete()
 
         logger.info("Stats: %s", str(stats))
