@@ -1,0 +1,51 @@
+name: migration test
+
+on: [push, pull_request]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  migrate-project:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        django-version: [
+          '4.2',
+        ]
+        python-version: ['3.11']
+        os: [
+          ubuntu-20.04,
+        ]
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Create dummy project
+      run: |
+        python -m venv .venv
+        source ./.venv/bin/activate
+        python -m pip install --upgrade pip
+        pip install "djangocms-frontend[cms-3]<2" Django~=${{ matrix.django-version }}
+        django-admin startproject --template https://github.com/django-cms/cms-template/archive/migration.zip cmsproject
+        pip install -e .
+        cd cmsproject
+        python -m manage migrate
+        python -m manage cms check
+        python -m djangocms_4_migration.test
+    - name: Upgrade to django CMS 4
+      run: |
+        source ./.venv/bin/activate
+        cd cmsproject
+        pip install -U "django-cms<5" djangocms-versioning djangocms-alias
+        DJANGO_SETTINGS_MODULE="cmsproject.settings4" python -m manage cms4_migration
+    - name: Run tests
+      run: |
+        source ./.venv/bin/activate
+        cd cmsproject
+        python -m djangocms_4_migration.test
