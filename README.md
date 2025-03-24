@@ -65,7 +65,7 @@ Add the migration tool to `INSTALLED_APPS` temporarily. In your `settings.py` ma
 INSTALLED_APPS = [
     ...,
     "djangocms_4_migration",
-    "djangocms_verisoning",
+    "djangocms_versioning",
     "djangocms_alias",
     ...,
 ]
