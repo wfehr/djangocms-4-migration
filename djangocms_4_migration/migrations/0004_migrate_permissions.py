@@ -1,9 +1,13 @@
+from django.conf import settings
 from django.db import migrations
 
 
 def forwards(apps, schema_editor):
     ContentType = apps.get_model('contenttypes', 'ContentType')
-    User = apps.get_model('auth', 'User')
+
+    user_app_label, user_model_name = settings.AUTH_USER_MODEL.split('.')
+    User = apps.get_model(user_app_label, user_model_name)
+
     Group = apps.get_model('auth', 'Group')
     Permission = apps.get_model('auth', 'Permission')
 
