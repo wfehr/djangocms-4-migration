@@ -1,6 +1,6 @@
 # django CMS 4 Migration
 
-**Warning:** If the migration process fails to complete you will not be able to undo the changes without reloading a database backup. We cannot be held accountable for any data loss sustained when running the commands provided in this project. Please keep a database backup before running any commands provided by this package. 
+**Warning:** If the migration process fails to complete you will not be able to undo the changes without reloading a database backup. We cannot be held accountable for any data loss sustained when running the commands provided in this project. Please keep a database backup before running any commands provided by this package.
 
 ## When do I need this package?
 This package is designed to migrate a django CMS 3.5+ project to django CMS 4.0.
@@ -12,13 +12,13 @@ This package is designed to migrate a django CMS 3.5+ project to django CMS 4.0.
 - Runs django CMS' migrations
 
 ## Limitations
-Due to the nature of the changes between django CMS 3.5+ and 4.0 the package will fail to function if an incompatible package is installed. 
+Due to the nature of the changes between django CMS 3.5+ and 4.0 the package will fail to function if an incompatible package is installed.
 
 This may require you to:
  - Fork or copy and modify this package to work with any bespoke requirements your project has (we may accept these changes back for popular packages as a configurable option)
- - Ensure that all installed packages for your project are 
+ - Ensure that all installed packages for your project are
 
-## Prerequisites 
+## Prerequisites
 Require knowledge of the changes and new features in 4.0:
 - New cms app configuration
 - Revised Page, Title (Now named PageContent) and Placeholder relationships
@@ -55,7 +55,7 @@ pip install djangocms-alias
 
 First install this package in your project
 ```
-pip install git+https://github.com/fsbraun/djangocms-4-migration
+pip install git+https://github.com/django-cms/djangocms-4-migration
 ```
 
 ## Configuration
@@ -79,13 +79,13 @@ CMS_MIGRATION_USER_ID = <user id>
 ```
 
 ## Running
-Simply run the following command to run the data migration. 
+Simply run the following command to run the data migration.
 **Note:** This command calls the django migrate command, this is because it has to run commands that save information that would have been lost by running the cms migrations directly.
 ```
 python manage.py cms4_migration
 ```
 
-You can ignore warnings of the form 
+You can ignore warnings of the form
 ```
 UserWarning: No user has been supplied when creating a new AliasContent object.
 No version could be created. Make sure that the creating code also creates a
