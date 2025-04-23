@@ -210,7 +210,6 @@ def process_old_alias_sources(site, language, site_plugin_queryset):
             # Create version
             changed_by = User.objects.get(**{User.USERNAME_FIELD: old_plugin.placeholder.source.changed_by})
             version = Version.objects.create(content=alias_content, created_by=changed_by)
-            version.save()
             version.publish(changed_by)
 
         # create csm4 alias plugins for cms3 alias references
@@ -254,8 +253,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         with transaction.atomic():
             # Alias source plugin list
-            cms3_alias_ref_ids = AliasPluginModel.objects.values('plugin_id').order_by('plugin_id').distinct('plugin_id')
-            plugin_id_list = [cms3_plugin['plugin_id'] for cms3_plugin in cms3_alias_ref_ids if cms3_plugin['plugin_id']]
+            plugin_id_list = list(AliasPluginModel.objects.values_list('plugin_id', flat=True).order_by('plugin_id'))
             alias_source_total = len(plugin_id_list)
             # Alias references list count
             alias_reference_total = AliasPluginModel.objects.count()

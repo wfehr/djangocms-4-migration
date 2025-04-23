@@ -6,7 +6,10 @@
 This package is designed to migrate a django CMS 3.5+ project to django CMS 4.0.
 
 ## What does this package do?
-- Keeps any draft and published content, ensuring that any new draft changes are kept as a new draft version in djangocms_versioning. 
+- Keeps any draft and published content, ensuring that any new draft changes are kept as a new draft version in djangocms_versioning.
+- Creates aliases for static placeholder
+- Migrates alias plugins
+- Runs django CMS' migrations
 
 ## Limitations
 Due to the nature of the changes between django CMS 3.5+ and 4.0 the package will fail to function if an incompatible package is installed. 
@@ -27,24 +30,24 @@ Requires knowledge of django CMS Versioning
 ### Install the following packages
 The following packages are not yet officially released, they need to be installed directly from the repository. We need your help to make packages v4.0 compatible and to provide documentation for the wider community!
 
-django CMS 4.0
+django CMS 4.0+
 ```
-pip install http://github.com/divio/django-cms/tarball/release/4.0.x#egg=django-cms
+pip install django-cms
 ```
 
 djangocms-text-ckeditor
 ```
-pip install https://github.com/divio/djangocms-text-ckeditor/tarball/support/4.0.x#egg=djangocms-text-ckeditor
+pip install djangocms-text-ckeditor
 ```
 
 djangocms-versioning
 ```
-pip install https://github.com/divio/djangocms-versioning/tarball/master#egg=djangocms-versioning
+pip install djangocms-versioning
 ```
 
 djangocms-alias
 ```
-pip install https://github.com/divio/djangocms-alias/tarball/master#egg=djangocms-alias
+pip install djangocms-alias
 ```
 
 ## Installation
@@ -52,10 +55,22 @@ pip install https://github.com/divio/djangocms-alias/tarball/master#egg=djangocm
 
 First install this package in your project
 ```
-pip install djangocms-4-migration
+pip install git+https://github.com/fsbraun/djangocms-4-migration
 ```
 
 ## Configuration
+
+Add the migration tool to `INSTALLED_APPS` temporarily. In your `settings.py` make sure that it is listed. You can remove it after the migration process.
+```
+INSTALLED_APPS = [
+    ...,
+    "djangocms_4_migration",
+    "djangocms_versioning",
+    "djangocms_alias",
+    ...,
+]
+CMS_CONFIRM_VERSION4 = True
+```
 
 If you have a custom user model, you should designate a "migration user" by specifying the user ID in your settings like so:
 
@@ -68,6 +83,13 @@ Simply run the following command to run the data migration.
 **Note:** This command calls the django migrate command, this is because it has to run commands that save information that would have been lost by running the cms migrations directly.
 ```
 python manage.py cms4_migration
+```
+
+You can ignore warnings of the form 
+```
+UserWarning: No user has been supplied when creating a new AliasContent object.
+No version could be created. Make sure that the creating code also creates a
+Version objects or use AliasContent.objects.with_user(user).create(...)
 ```
 
 ## Common solutions for django CMS 4.0 compatibility

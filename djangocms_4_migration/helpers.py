@@ -14,7 +14,7 @@ def get_or_create_migration_user(user_model=get_user_model()):
     This is the user that is used to automatically attach to new items created as
     part of the cms migration.
     """
-    if getattr(settings, "CMS_MIGRATION_USER_ID"):
+    if getattr(settings, "CMS_MIGRATION_USER_ID", None):
         return user_model.objects.get(id=settings.CMS_MIGRATION_USER_ID), False
     return user_model.objects.get_or_create(
         username='djangocms_4_migration_user',
