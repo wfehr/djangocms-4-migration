@@ -4,7 +4,7 @@
 
 * feat: Migrate permissions by @fsbraun in https://github.com/fsbraun/djangocms-4-migration/pull/7
 * feat: ensure page urls are unique by @fsbraun in https://github.com/fsbraun/djangocms-4-migration/pull/8
-
+* fix: load user model from `AUTH_USER_MODEL`by @foarsitter in https://github.com/fsbraun/djangocms-4-migration/pull/9
 ## 0.1.0 (2025-03-14)
 
 * feature: Update foreign key relations to page objects
