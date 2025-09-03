@@ -96,6 +96,14 @@ def _fix_page_references(page):
                 **{rel.field.name: replacement_page}
             )
 
+    custom_function = getattr(settings, "CMS_MIGRATION_PROCESS_PAGE_REFERENCES", None)
+    if custom_function:
+        module, function = custom_function.rsplit(".", 1)
+        getattr(
+            __import__(module, fromlist=[""]),
+            function,
+        )(page, replacement_page)
+
 
 def _delete_page(page):
     try:
