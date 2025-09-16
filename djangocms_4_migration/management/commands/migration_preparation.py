@@ -1,5 +1,6 @@
 import logging
 
+from django.conf import settings
 from django.core.management.base import BaseCommand
 from django.db import connection
 
@@ -19,3 +20,11 @@ class Command(BaseCommand):
                 cursor.execute("DROP table djangocms_history_placeholderoperation;")
         except:
             logger.info("djangocms_history already removed")
+
+        custom_function = getattr(settings, "CMS_MIGRATION_PROCESS_MIGRATION_PREPARATION", None)
+        if custom_function:
+            module, function = custom_function.rsplit(".", 1)
+            getattr(
+                __import__(module, fromlist=[""]),
+                function,
+            )()
