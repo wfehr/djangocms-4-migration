@@ -16,7 +16,8 @@ Due to the nature of the changes between django CMS 3.5+ and 4.0 the package wil
 
 This may require you to:
  - Fork or copy and modify this package to work with any bespoke requirements your project has (we may accept these changes back for popular packages as a configurable option)
- - Ensure that all installed packages for your project are
+ - Ensure that all installed packages for your project are compatible with django CMS 4. If not, remove them before migrating.
+ - `PageFields` in custom models need to have a `related_name` (since page pk change and references need to be updated). If you have page filds with a `related_name="+"`, temporarily give them a related name for the migration.
 
 ## Prerequisites
 Require knowledge of the changes and new features in 4.0:
