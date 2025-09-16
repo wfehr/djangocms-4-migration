@@ -5,6 +5,7 @@ import re
 
 from itertools import chain
 
+from django.contrib.contenttypes.models import ContentType
 from django.core.management.base import BaseCommand
 from django.contrib.contenttypes.models import ContentType
 
@@ -143,7 +144,6 @@ def _create_alias_content(alias, name, language, user, state=PUBLISHED):
         created_by=user,
         state=state,
     )
-
     logger.info(f"Created AliasContent {alias_content}")
 
     return alias_content
